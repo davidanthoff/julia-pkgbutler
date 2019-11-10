@@ -40,7 +40,8 @@ async function run() {
         ...github.context.repo,
         title: 'Julia Package Butler Updates',
         head: 'julia-pkgbutler-updates',
-        base: 'master'
+        base: 'master',
+        body: 'The Julia Package Butler suggests these changes.'
       })
     }
 
