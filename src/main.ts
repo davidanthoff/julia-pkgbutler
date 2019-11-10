@@ -29,7 +29,12 @@ async function run() {
 
       await exec.exec('git', ['commit', '-m', '"Julia Package Butler updates"'])
 
-      let ret_code2 = await exec.exec('git', ['diff', LOCAL_BRANCH_NAME, 'remotes/origin/julia-pkgbutler-updates', '--exit-code', '--quiet'])
+      let ret_code2 = 0;
+      try {
+        ret_code2 = await exec.exec('git', ['diff', LOCAL_BRANCH_NAME, 'remotes/origin/julia-pkgbutler-updates', '--', '--exit-code', '--quiet'])
+      } catch (error) {
+        console.log('HERE WE ARE');
+      }
 
       if (ret_code2 != 0) {
         await exec.exec('git', ['push', '-f', 'publisher', `${LOCAL_BRANCH_NAME}:julia-pkgbutler-updates`])
