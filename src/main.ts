@@ -11,7 +11,13 @@ async function run() {
 
     await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/davidanthoff/PkgButler.jl", rev="master"))']);
 
-    await exec.exec('git', ['branch', '-D', 'julia-pkgbutler-updates'])
+    // TODO Handle this in a better way
+    try {
+      await exec.exec('git', ['branch', '-D', 'julia-pkgbutler-updates'])
+    } catch (error) {
+
+    }
+
     await exec.exec('git', ['checkout', '-b', 'julia-pkgbutler-updates'])
 
     await exec.exec('julia', ['--color=yes', '-e', 'import PkgButler; PkgButler.update_pkg(pwd())']);
