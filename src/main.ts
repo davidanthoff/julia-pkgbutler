@@ -22,6 +22,8 @@ async function run() {
     let ret_code = await exec.exec('git', ['diff-index', '--quiet', 'HEAD', '--']);
 
     if (ret_code != 1) {
+      console.log('Julia Package Butler found things that need to be fixed on master.')
+
       await exec.exec('git', ['config', '--global', 'user.name', '"Julia Package Butler"'])
       await exec.exec('git', ['config', '--global', 'user.email', '"<>"'])
 
@@ -37,6 +39,8 @@ async function run() {
       }
 
       if (ret_code2 != 0) {
+        console.log('Julia Package Butler found things that need to be fixed on master that are not yet on the julia-pkgbutler-update branch.')
+
         await exec.exec('git', ['push', '-f', 'publisher', `${LOCAL_BRANCH_NAME}:julia-pkgbutler-updates`])
 
         try {
@@ -47,15 +51,20 @@ async function run() {
             base: 'master',
             body: 'The Julia Package Butler suggests these changes.'
           })
+          console.log('Julia Package Butler succesfully created a new PR.')
         } catch (error) {
-          console.log('Something went wrong trying to create PR.')
+          console.log('Julia Package Butler was not able to create a new PR.')
         }
+      } else {
+        console.log('Julia Package Butler found that all necessary changes are already on the julia-pkgbutler-update branch.')
       }
     } else {
+      console.log('Julia Package Butler found nothing that needs to be updated on master.')
       try {
         await exec.exec('git', ['push', 'publisher', '--delete', 'julia-pkgbutler-updates'])
+        console.log('Julia Package Butler succesfully deleted the branch julia-pkgbutler-updates.')
       } catch (error) {
-        console.log('Something went wrong trying to delete remote branch.')
+        console.log('Julia Package Butler was not able to delete the branch julia-pkgbutler-updates.')
       }
     }
 
