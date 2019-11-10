@@ -12,6 +12,9 @@ async function run() {
     let ret_code = await exec.exec('git', ['diff-index', '--quiet', 'HEAD', '--']);
 
     if (ret_code!=1) {
+      await exec.exec('git', ['config', '--global', 'user.name', '"Julia Package Butler"'])
+      await exec.exec('git', ['config', '--global', 'user.email', '"<>"'])
+
       await exec.exec('git', ['add', '.'])
 
       await exec.exec('git', ['commit', '-m', '"Julia butler updates"'])
