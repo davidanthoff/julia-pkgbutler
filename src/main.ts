@@ -9,11 +9,9 @@ async function run() {
 
     await exec.exec('julia', ['--color=yes', '-e', 'import PkgButler; PkgButler.update_pkg(pwd())']);
     
-    try {
-      await exec.exec('git', ['diff-index', '--quiet', 'HEAD', '--']);
-    }
-    catch (error) {
-      
+    let ret_code = await exec.exec('git', ['diff-index', '--quiet', 'HEAD', '--']);
+
+    if (ret_code!=1) {
       await exec.exec('git', ['add', '.'])
 
       await exec.exec('git', ['commit', '-m', '"Julia butler updates"'])
