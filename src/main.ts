@@ -33,7 +33,7 @@ async function run() {
 
       let ret_code2 = 0;
       try {
-        ret_code2 = await exec.exec('git', ['diff', LOCAL_BRANCH_NAME, 'remotes/origin/julia-pkgbutler-updates', '--', '--exit-code', '--quiet'])
+        ret_code2 = await exec.exec('git', ['diff', LOCAL_BRANCH_NAME, 'remotes/origin/julia-pkgbutler-updates', '--exit-code', '--quiet'])
       } catch (error) {
         ret_code2 = 1
       }
