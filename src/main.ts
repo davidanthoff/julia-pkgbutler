@@ -16,11 +16,11 @@ async function run() {
 
     await exec.exec('git', ['remote', 'add', 'publisher', REMOTE_REPO]);
 
-    await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/davidanthoff/PkgButler.jl", rev="master"))']);
+    await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/davidanthoff/PkgButlerEngine.jl", rev="master"))']);
 
     await exec.exec('git', ['checkout', '-b', LOCAL_BRANCH_NAME])
 
-    await exec.exec('julia', ['--color=yes', '-e', 'import PkgButler; PkgButler.update_pkg(pwd())']);
+    await exec.exec('julia', ['--color=yes', '-e', 'import PkgButlerEngine; PkgButlerEngine.update_pkg(pwd())']);
 
     await exec.exec('git', ['add', '-A', '.'])
 
