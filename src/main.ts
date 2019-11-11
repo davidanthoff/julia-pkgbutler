@@ -37,7 +37,7 @@ async function run() {
     if (ret_code != 0) {
       console.log('Julia Package Butler found things that need to be fixed on master.')
 
-      await exec.exec('git', ['commit', '-m', '"Julia Package Butler updates"'])
+      await exec.exec('git', ['commit', '-m', 'Fix issues identified by Julia Package Butler'])
 
       let ret_code2 = 0;
       try {
