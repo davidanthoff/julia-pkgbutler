@@ -22,7 +22,7 @@ async function run() {
 
     await exec.exec('julia', ['--color=yes', '-e', 'import PkgButler; PkgButler.update_pkg(pwd())']);
 
-    await exec.exec('git', ['add', '.'])
+    await exec.exec('git', ['add', '-A', '.'])
 
     // This is a workaround describe at https://stackoverflow.com/questions/3878624/how-do-i-programmatically-determine-if-there-are-uncommitted-changes
     await exec.exec('git', ['diff'])
