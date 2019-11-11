@@ -29,7 +29,9 @@ async function run() {
     
     let ret_code = await exec.exec('git', ['diff-index', '--cached', '--quiet', 'HEAD']);
 
-    if (ret_code != 1) {
+    console.log(`The return code is ${ret_code.toString()}`);
+
+    if (ret_code != 0) {
       console.log('Julia Package Butler found things that need to be fixed on master.')
 
       await exec.exec('git', ['commit', '-m', '"Julia Package Butler updates"'])
