@@ -6,7 +6,7 @@ const uuidv4 = require('uuid/v4');
 async function run() {
   try {
     const GITHUB_TOKEN = core.getInput('github-token', { required: true });
-    const REMOTE_REPO = `https://${process.env.GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
+    const REMOTE_REPO = `git@github.com/${process.env.GITHUB_REPOSITORY}.git`;
     const LOCAL_BRANCH_NAME = uuidv4();
 
     const octokit = new github.GitHub(GITHUB_TOKEN);
