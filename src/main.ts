@@ -27,9 +27,12 @@ async function run() {
     // This is a workaround describe at https://stackoverflow.com/questions/3878624/how-do-i-programmatically-determine-if-there-are-uncommitted-changes
     await exec.exec('git', ['diff'])
     
-    let ret_code = await exec.exec('git', ['diff-index', '--cached', '--quiet', 'HEAD']);
-
-    console.log(`The return code is ${ret_code.toString()}`);
+    let ret_code = 0
+    try {
+      ret_code = await exec.exec('git', ['diff-index', '--cached', '--quiet', 'HEAD']);
+    } catch (error) {
+      ret_code = 1
+    }
 
     if (ret_code != 0) {
       console.log('Julia Package Butler found things that need to be fixed on master.')
