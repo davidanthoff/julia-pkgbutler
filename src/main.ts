@@ -11,6 +11,9 @@ async function run() {
 
     const octokit = new github.GitHub(GITHUB_TOKEN);
 
+    await exec.exec('git', ['config', '--global', 'user.name', '"Julia Package Butler"'])
+    await exec.exec('git', ['config', '--global', 'user.email', '"<>"'])
+
     await exec.exec('git', ['remote', 'add', 'publisher', REMOTE_REPO]);
 
     await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/davidanthoff/PkgButler.jl", rev="master"))']);
@@ -19,15 +22,15 @@ async function run() {
 
     await exec.exec('julia', ['--color=yes', '-e', 'import PkgButler; PkgButler.update_pkg(pwd())']);
 
-    let ret_code = await exec.exec('git', ['diff-index', '--quiet', 'HEAD', '--']);
+    await exec.exec('git', ['add', '.'])
+
+    // This is a workaround describe at https://stackoverflow.com/questions/3878624/how-do-i-programmatically-determine-if-there-are-uncommitted-changes
+    await exec.exec('git', ['diff'])
+    
+    let ret_code = await exec.exec('git', ['diff-index', '--cached', '--quiet', 'HEAD']);
 
     if (ret_code != 1) {
       console.log('Julia Package Butler found things that need to be fixed on master.')
-
-      await exec.exec('git', ['config', '--global', 'user.name', '"Julia Package Butler"'])
-      await exec.exec('git', ['config', '--global', 'user.email', '"<>"'])
-
-      await exec.exec('git', ['add', '.'])
 
       await exec.exec('git', ['commit', '-m', '"Julia Package Butler updates"'])
 
