@@ -5,6 +5,7 @@ const uuidv4 = require('uuid/v4');
 
 async function run() {
   try {
+    const channel = core.getInput('channel');
     const GITHUB_TOKEN = core.getInput('github-token', { required: true });
     const REMOTE_REPO = `git@github.com:${process.env.GITHUB_REPOSITORY}.git`;
     const LOCAL_BRANCH_NAME = uuidv4();
@@ -16,7 +17,12 @@ async function run() {
 
     await exec.exec('git', ['remote', 'add', 'publisher', REMOTE_REPO]);
 
-    await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/davidanthoff/PkgButlerEngine.jl", rev="master"))']);
+    if (channel=='dev') {
+      await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/davidanthoff/PkgButlerEngine.jl", rev="master"))']);
+    }
+    else if (channel===undefined || channel=='stable') {
+      await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add(PkgButlerEngine)']);
+    }
 
     await exec.exec('git', ['checkout', '-b', LOCAL_BRANCH_NAME])
 
@@ -26,7 +32,7 @@ async function run() {
 
     // This is a workaround describe at https://stackoverflow.com/questions/3878624/how-do-i-programmatically-determine-if-there-are-uncommitted-changes
     await exec.exec('git', ['diff'])
-    
+
     let ret_code = 0
     try {
       ret_code = await exec.exec('git', ['diff-index', '--cached', '--quiet', 'HEAD']);
