@@ -18,7 +18,7 @@ async function run() {
     await exec.exec('git', ['remote', 'add', 'publisher', REMOTE_REPO]);
 
     if (channel=='dev') {
-      await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/davidanthoff/PkgButlerEngine.jl", rev="master"))']);
+      await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add(PackageSpec(name="PkgButlerEngine", rev="master"))']);
     }
     else if (channel===undefined || channel=='stable') {
       await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add("PkgButlerEngine")']);
