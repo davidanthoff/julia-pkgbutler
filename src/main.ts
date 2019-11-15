@@ -21,7 +21,7 @@ async function run() {
       await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/davidanthoff/PkgButlerEngine.jl", rev="master"))']);
     }
     else if (channel===undefined || channel=='stable') {
-      await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add(PkgButlerEngine)']);
+      await exec.exec('julia', ['--color=yes', '-e', 'using Pkg; Pkg.add("PkgButlerEngine")']);
     }
 
     await exec.exec('git', ['checkout', '-b', LOCAL_BRANCH_NAME])
