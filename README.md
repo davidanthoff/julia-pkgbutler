@@ -4,6 +4,8 @@
 
 The GitHub Action repository for the Julia Package Butler.
 
+The underlying functionality for `julia-pkgbutler` is provided by the [`PkgButlerEngine.jl` Julia package](https://github.com/davidanthoff/PkgButlerEngine.jl).
+
 ## Functionality
 
 The Julia Package Butler currently makes the following changes to a package repository:
