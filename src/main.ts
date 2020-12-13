@@ -4,7 +4,7 @@ import * as io from '@actions/io';
 import * as github from '@actions/github';
 import * as fs from 'fs';
 import * as child_process from 'child_process';
-const uuidv4 = require('uuid/v4');
+import { v4 as uuidv4 } from 'uuid';
 
 async function run() {
   try {
@@ -30,7 +30,7 @@ async function run() {
     const REMOTE_REPO = `git@github.com:${process.env.GITHUB_REPOSITORY}.git`;
     const LOCAL_BRANCH_NAME = uuidv4();
 
-    const octokit = new github.GitHub(GITHUB_TOKEN);
+    const octokit = github.getOctokit(GITHUB_TOKEN);
 
     await exec.exec('git', ['config', '--global', 'user.name', '"Julia Package Butler"'])
     await exec.exec('git', ['config', '--global', 'user.email', '"<>"'])
