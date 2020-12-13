@@ -1,113 +1,24 @@
-# Create a JavaScript Action using TypeScript
+# julia-pkgbutler
 
-Use this template to bootstrap the creation of a JavaScript action.:rocket:
+## Overview
 
-This template includes compilication support, tests, a validation workflow, publishing, and versioning guidance.  
+The GitHub Action repository for the Julia Package Butler.
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
+The underlying functionality for `julia-pkgbutler` is provided by the [`PkgButlerEngine.jl` Julia package](https://github.com/davidanthoff/PkgButlerEngine.jl).
 
-## Create an action from this template
+## Functionality
 
-Click the `Use this Template` and provide the new repo details for your action
+The Julia Package Butler currently makes the following changes to a package repository:
 
-## Code in Master
+- The GitHub Action workflow for the Package Butler itself is updated to the latest version.
+- If the `Project.toml` doesn't have a version bound for `julia` in the `compat` section, it will add a version bound declaring the package compatible with Julia 1.0.
+- It will add GitHub Action workflows for continuous integration. These workflows are automatically configured to only run on Julia versions that are compatible with the `compat` entry for Julia in the `Project.toml` file of the package.
+- If a `docs/make.jl` file exists, a GitHub Action workflow that builds and deploys documentation is added to the package.
+- If a `docs/Project.toml` file exists, the butler will ensure that the version bound on Documenter.jl is no lower than 0.24 (the first version to support building documentation with GitHub Actions).
+- Enable [CompatHelper.jl](https://github.com/bcbi/CompatHelper.jl) for the repository.
+- Enable [TagBot](https://github.com/JuliaRegistries/TagBot) for the repository.
 
-Install the dependencies  
-```bash
-$ npm install
-```
-
-Build the typescript
-```bash
-$ npm run build
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml contains defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos.  We will create a releases branch and only checkin production modules (core in this case). 
-
-Comment out node_modules in .gitignore and create a releases/v1 branch
-```bash
-# comment out in distribution branches
-# node_modules/
-```
-
-```bash
-$ git checkout -b releases/v1
-$ git commit -a -m "prod dependencies"
-```
-
-```bash
-$ npm prune --production
-$ git add node_modules
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing the releases/v1 branch
-
-```yaml
-uses: actions/typescript-action@releases/v1
-with:
-  milliseconds: 1000
-```
-
-See the [actions tab](https://github.com/actions/javascript-action/actions) for runs of this action! :rocket:
-
-## Usage:
-
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and tested action
-
-```yaml
-uses: actions/typescript-action@v1
-with:
-  milliseconds: 1000
-```
+When the `bach` template is used, these additional channges are made:
+- Travis and Appveyor configuration files are removed.
+- Whenever any Julia file on `master` is not properly formatted, a PR with formatting changes is opened (based on https://github.com/julia-vscode/DocumentFormat.jl).
+- Any PR has an additional check whether Julia code files are properly formatted.

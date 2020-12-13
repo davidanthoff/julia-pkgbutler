@@ -20,18 +20,18 @@
   "author": "David Anthoff",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.0",
-    "@actions/exec": "^1.0.1",
-    "@actions/github": "^1.1.0",
-    "@actions/io": "^1.0.1",
-    "uuid": "^3.3.3"
+    "@actions/core": "^1.2.6",
+    "@actions/exec": "^1.0.4",
+    "@actions/github": "^4.0.0",
+    "@actions/io": "^1.0.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.23",
-    "@types/node": "^12.12.8",
+    "@types/jest": "^26.0.19",
+    "@types/node": "^12.19.9",
     "jest": "^24.9.0",
     "jest-circus": "^24.9.0",
-    "ts-jest": "^24.1.0",
-    "typescript": "^3.7.2"
+    "ts-jest": "^24.3.0",
+    "typescript": "^3.9.7"
   }
 }
