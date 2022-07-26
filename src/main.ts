@@ -61,7 +61,7 @@ async function run() {
     }
 
     if (ret_code != 0) {
-      console.log('Julia Package Butler found things that need to be fixed on master.')
+      console.log('Julia Package Butler found things that need to be fixed on main.')
 
       await exec.exec('git', ['commit', '-m', 'Fix issues identified by Julia Package Butler'])
 
@@ -73,7 +73,7 @@ async function run() {
       }
 
       if (ret_code2 != 0) {
-        console.log('Julia Package Butler found things that need to be fixed on master that are not yet on the julia-pkgbutler-update branch.')
+        console.log('Julia Package Butler found things that need to be fixed on main that are not yet on the julia-pkgbutler-update branch.')
 
         await exec.exec('git', ['push', '-f', 'publisher', `${LOCAL_BRANCH_NAME}:julia-pkgbutler-updates`])
 
@@ -82,18 +82,31 @@ async function run() {
             ...github.context.repo,
             title: 'Julia Package Butler Updates',
             head: 'julia-pkgbutler-updates',
-            base: 'master',
+            base: 'main',
             body: 'The Julia Package Butler suggests these changes.'
           })
           console.log('Julia Package Butler succesfully created a new PR.')
         } catch (error) {
-          console.log('Julia Package Butler was not able to create a new PR.')
+          console.log('Julia Package Butler was not able to create a new PR against the main branch. Now trying master branch.')
+          try {
+            await octokit.pulls.create({
+              ...github.context.repo,
+              title: 'Julia Package Butler Updates',
+              head: 'julia-pkgbutler-updates',
+              base: 'master',
+              body: 'The Julia Package Butler suggests these changes.'
+            })
+            console.log('Julia Package Butler succesfully created a new PR.')
+          }
+          catch (error) {
+            console.log('Julia Package Butler was also not able to create a new PR against the master branch.')
+          }
         }
       } else {
         console.log('Julia Package Butler found that all necessary changes are already on the julia-pkgbutler-update branch.')
       }
     } else {
-      console.log('Julia Package Butler found nothing that needs to be updated on master.')
+      console.log('Julia Package Butler found nothing that needs to be updated on main.')
       try {
         await exec.exec('git', ['push', 'publisher', '--delete', 'julia-pkgbutler-updates'])
         console.log('Julia Package Butler succesfully deleted the branch julia-pkgbutler-updates.')
