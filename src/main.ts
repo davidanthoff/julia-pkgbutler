@@ -78,7 +78,7 @@ async function run() {
         await exec.exec('git', ['push', '-f', 'publisher', `${LOCAL_BRANCH_NAME}:julia-pkgbutler-updates`])
 
         try {
-          await octokit.pulls.create({
+          await octokit.rest.pulls.create({
             ...github.context.repo,
             title: 'Julia Package Butler Updates',
             head: 'julia-pkgbutler-updates',
@@ -89,7 +89,7 @@ async function run() {
         } catch (error) {
           console.log('Julia Package Butler was not able to create a new PR against the main branch. Now trying master branch.')
           try {
-            await octokit.pulls.create({
+            await octokit.rest.pulls.create({
               ...github.context.repo,
               title: 'Julia Package Butler Updates',
               head: 'julia-pkgbutler-updates',
@@ -115,8 +115,13 @@ async function run() {
       }
     }
 
-  } catch (error) {
-    core.setFailed(error.message);
+  } catch (e) {
+    if (e instanceof Error) {
+      core.setFailed(e.message);
+    }
+    else {
+      core.setFailed('Unknown error.')
+    }
   }
 }
 
