@@ -1,6 +1,13 @@
 name: 'Julia package butler'
 description: 'This action performes maintainance tasks on a Julia package repository.'
 author: 'David Anthoff'
+inputs:
+  github-token:
+    required: true
+  ssh-private-key:
+    required: true
+  channel:
+    required: true
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'lib/main.js'
